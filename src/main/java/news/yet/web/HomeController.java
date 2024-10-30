@@ -25,7 +25,7 @@ public class HomeController {
     @Value("${hostExtension:.yet.news}")
     private String hostExtension;
 
-    @Value("${mainSite:https://yet.news}")
+    @Value("${mainSite:https://yet.news/}")
     private String mainSite;
 
     private String getAnswer(String answerCode) {
