@@ -1,5 +1,7 @@
 FROM eclipse-temurin:23-jdk-alpine AS build
 
+LABEL org.opencontainers.image.source https://github.com/lindsayevans/yet.news
+
 WORKDIR /app
 
 COPY .mvn/ ./.mvn
