@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>...yet? - Create</title>
+    <link rel="stylesheet" href="/main.css" />
+  </head>
+  <body>
+    <h1><a href="/">...yet?</a> - create your own</h1>
+    <form
+      action="/create"
+      method="POST"
+      class="create-form"
+      th:action="@{/create}"
+      th:object="${question}"
+    >
+      <div class="field-group" data-hint="Your question">
+        <label for="question" aria-label="Question">
+          <input
+            type="text"
+            id="question"
+            th:field="*{question}"
+            placeholder="Is it beer o'clock"
+            required
+            autofocus
+          />
+          yet?</label
+        >
+      </div>
+      <div class="field-group" data-hint="The answer">
+        <label for="answer" aria-label="Answer">
+          <select th:field="*{answer}" id="answer" required>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+            <option value="maybe">Maybe</option>
+          </select></label
+        >
+      </div>
+      <fieldset>
+        <legend>Extra bits</legend>
+        <div class="field-group">
+          <p><strong>Chaos mode</strong></p>
+          <p>Anyone can change the answer at any time</p>
+          <label for="editable-true">
+            <input
+              type="radio"
+              id="editable-true"
+              th:field="*{editable}"
+              th:value="${true}"
+            />
+            On
+          </label>
+          <label for="editable-false">
+            <input
+              type="radio"
+              id="editable-false"
+              th:field="*{editable}"
+              th:value="${false}"
+            />
+            Off
+          </label>
+        </div>
+        <div class="field-group password">
+          <label for="password">
+            Password for changing answer:
+            <input type="password" id="password" th:field="*{password}" />
+          </label>
+        </div>
+      </fieldset>
+      <pre
+        class="field-group address"
+        data-hint="This will be your website address"
+        data-unavailable="Sorry, that address is unavailable"
+      >
+        <label for="subdomain" aria-label="Subdomain"
+          >https://<input
+            type="text"
+            id="subdomain"
+            th:field="*{subdomain}"
+            placeholder="is-it-beer-o-clock"
+            minlength="2"
+            maxlength="255"
+            required
+          />[[${hostExtension}]]</label
+        >
+        <p th:if="${#fields.hasErrors('subdomain')}" th:errors="*{subdomain}"></p>
+      </pre>
+      <div class="form-actions"><button type="submit">Create!</button></div>
+    </form>
+    <script>
+      const $subdomain = document.getElementById('subdomain');
+      const $question = document.getElementById('question');
+      const $answer = document.getElementById('answer');
+      let subdomainModified = false;
+
+      // TODO: check subdomain availability
+      const checkAvailability = (subdomain) => {
+        fetch(`/availability?subdomain=${subdomain}`)
+          .then((x) => x.json())
+          .then((response) => {
+            $subdomain.dataset['available'] = response.available;
+          });
+      };
+
+      const getSubdomain = (question) => {
+        return question.replace(/([^a-zA-Z]+)/g, '-').toLowerCase();
+      };
+
+      $question.addEventListener('input', () => {
+        if (!subdomainModified) {
+          $subdomain.value = getSubdomain($question.value);
+          checkAvailability($subdomain.value);
+        }
+      });
+
+      $subdomain.addEventListener('input', () => {
+        subdomainModified = $subdomain.value !== getSubdomain($question.value);
+        checkAvailability($subdomain.value);
+      });
+
+      if ($subdomain.value.trim() !== '') {
+        checkAvailability($subdomain.value);
+      }
+
+      const $editable = Array.from(
+        document.querySelectorAll('[name="editable"]')
+      );
+      const $password = document.querySelector('.password');
+      $editable.forEach(($cb) => {
+        $cb.addEventListener('change', () => {
+          if ($cb.checked) {
+            $password.style.display = $cb.value === 'false' ? 'block' : 'none';
+          }
+        });
+      });
+      $password.style.display = $editable[1].checked ? undefined : 'none';
+    </script>
+  </body>
+</html>

@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>yet.news</title>
+    <meta charset="utf-8" />
+    <title>...yet?</title>
+    <link rel="stylesheet" href="/main.css" />
   </head>
   <body>
-    <h1>Are we there yet?</h1>
-    <pre>https://are-we-there.yet.news</pre>
-    <!-- <p th:text="|Hello, ${name}!|" />
-    <pre th:text="|Host: ${host}!|" /> -->
+    <h1>Can I launch this damn thing yet?</h1>
+    <p>No</p>
+    <p>
+      <a href="/create?question=Is%20it%20beer%20o%27clock">Get you some</a>
+    </p>
+    <p><a th:href="${mainSite}" th:text="${mainSite}"></a></p>
   </body>
 </html>

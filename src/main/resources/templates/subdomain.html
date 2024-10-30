@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title th:text="${question}" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="utf-8" />
+    <title>[[${question.question}]] yet?</title>
+    <link rel="stylesheet" href="/subdomain.css" />
   </head>
   <body>
-    <h1 th:text="${question}" />
+    <h1 th:text="|${question.question} yet?|" />
     <p th:text="${answer}" />
+
+    <p><a th:href="${mainSite}" th:text="${mainSite}"></a></p>
   </body>
 </html>
