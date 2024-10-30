@@ -25,6 +25,9 @@ public class HomeController {
     @Value("${hostExtension:.yet.news}")
     private String hostExtension;
 
+    @Value("${mainHost:yet.news}")
+    private String mainHost;
+
     @Value("${mainSite:https://yet.news/}")
     private String mainSite;
 
@@ -39,7 +42,7 @@ public class HomeController {
         model.addAttribute("mainSite", mainSite);
         var host = request.getServerName();
 
-        if (!host.equals("localhost")) {
+        if (!host.equals(mainHost)) {
             var subdomain = host.replaceAll(hostExtension, "");
             var questions = repository.findBySubdomain(subdomain);
             if (questions.size() == 0) {
