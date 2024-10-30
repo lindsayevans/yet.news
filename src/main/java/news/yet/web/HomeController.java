@@ -42,6 +42,10 @@ public class HomeController {
         model.addAttribute("mainSite", mainSite);
         var host = request.getServerName();
 
+        System.out.println("hostExtension: " + hostExtension);
+        System.out.println("mainHost: " + mainHost);
+        System.out.println("mainSite: " + mainSite);
+
         if (!host.equals(mainHost)) {
             var subdomain = host.replaceAll(hostExtension, "");
             var questions = repository.findBySubdomain(subdomain);
