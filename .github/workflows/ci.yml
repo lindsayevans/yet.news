@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       - name: Build Image
-        run: docker build -t ghcr.io/yet-news/web:latest .
+        run: docker build -t ghcr.io/${{ github.repository }}:latest .
 
       - name: Push Image
-        run: docker push ghcr.io/yet-news/web:latest
+        run: docker push ghcr.io/${{ github.repository }}:latest
