@@ -45,6 +45,7 @@ public class HomeController {
         System.out.println("hostExtension: " + hostExtension);
         System.out.println("mainHost: " + mainHost);
         System.out.println("mainSite: " + mainSite);
+        System.out.println("host: " + host);
 
         if (!host.equals(mainHost)) {
             var subdomain = host.replaceAll(hostExtension, "");
