@@ -1,0 +1,15 @@
+name: Azure App Service CD
+
+on:
+  workflow_dispatch:
+  registry_package:
+    types:
+      - updated
+      - published
+
+jobs:
+  deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Webhook for CD on Azure App Service
+        run: curl ${{ secrets.AZURE_APP_SERVICE_WEBHOOK }} -H "" -d ""
