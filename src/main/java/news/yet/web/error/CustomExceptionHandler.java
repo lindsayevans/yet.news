@@ -1,4 +1,4 @@
-package news.yet.web;
+package news.yet.web.error;
 
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.slf4j.Logger;

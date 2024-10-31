@@ -1,4 +1,4 @@
-package news.yet.web;
+package news.yet.web.db;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;

@@ -1,4 +1,4 @@
-package news.yet.web;
+package news.yet.web.questions;
 
 import java.util.List;
 

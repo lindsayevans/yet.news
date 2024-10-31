@@ -1,4 +1,4 @@
-package news.yet.web;
+package news.yet.web.homepage;
 
 import java.util.Collections;
 import java.util.Map;
@@ -23,6 +23,8 @@ import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import news.yet.web.questions.Question;
+import news.yet.web.questions.QuestionRepository;
 
 @Controller
 public class HomeController {
