@@ -1,29 +1,11 @@
 package news.yet.web.homepage;
 
-import java.util.Collections;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.server.ResponseStatusException;
-import org.apache.commons.lang.RandomStringUtils;
-
-import io.github.resilience4j.ratelimiter.RequestNotPermitted;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import news.yet.web.questions.Question;
 import news.yet.web.questions.QuestionRepository;
 
 @Controller
@@ -68,124 +50,6 @@ public class HomeController {
         }
 
         return "home";
-    }
-
-    @GetMapping("/availability")
-    @ResponseBody
-    public Map<String, Boolean> availability(
-            @RequestParam(name = "subdomain", required = true) String subdomain) {
-
-        // TODO: validation, banned words check
-
-        var existing = repository.findBySubdomain(subdomain);
-
-        return Collections.singletonMap("available", existing.size() == 0);
-    }
-
-    @GetMapping("/create")
-    public String create(HttpServletRequest request,
-            @RequestParam(name = "subdomain", required = false, defaultValue = "") String subdomain,
-            @RequestParam(name = "question", required = false, defaultValue = "") String question,
-            Model model) {
-
-        var answer = "maybe";
-        if (!question.equals("") && subdomain.equals("")) {
-            subdomain = question.replaceAll("([^a-zA-Z]+)", "-").toLowerCase();
-        }
-
-        var password = RandomStringUtils.randomAlphanumeric(7);
-
-        var questionModel = new Question();
-        questionModel.setSubdomain(subdomain);
-        questionModel.setQuestion(question);
-        questionModel.setAnswer(answer);
-        questionModel.setEditable(false);
-        questionModel.setPassword(password);
-
-        model.addAttribute("question", questionModel);
-        model.addAttribute("hostExtension", hostExtension);
-
-        return "create";
-    }
-
-    @PostMapping("/create")
-    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
-    public String createPost(@Valid Question question, BindingResult bindingResult,
-            Model model) {
-        var existing = repository.findBySubdomain(question.getSubdomain());
-        if (existing.size() > 0) {
-            bindingResult.addError(new FieldError("question", "subdomain",
-                    question.getSubdomain(), true, null, null,
-                    "Subdomain is not available"));
-        }
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("question", question);
-            model.addAttribute("hostExtension", hostExtension);
-            return "create";
-        }
-
-        repository.insert(question);
-
-        var url = "https://" + question.getSubdomain() + hostExtension;
-
-        model.addAttribute("url", url);
-        model.addAttribute("hostExtension", hostExtension);
-
-        return "success";
-    }
-
-    @GetMapping("/edit")
-    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
-    public String edit(HttpServletRequest request,
-            @RequestParam(name = "subdomain", required = false, defaultValue = "") String subdomain,
-            Model model) {
-
-        var questions = repository.findBySubdomain(subdomain);
-        if (questions.size() == 0) {
-            return "redirect:" + mainSite + "create?subdomain=" + subdomain;
-        }
-
-        var question = questions.get(0);
-        question.setPassword("");
-
-        model.addAttribute("subdomain", subdomain);
-        model.addAttribute("question", question);
-        model.addAttribute("answer", getAnswer(question.getAnswer()));
-
-        return "edit";
-
-    }
-
-    @PostMapping("/edit")
-    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
-    public String editPost(@Valid Question question, BindingResult bindingResult,
-            Model model) {
-
-        var existing = repository.findBySubdomain(question.getSubdomain());
-        var existingQuestion = existing.get(0);
-
-        if (existing.size() == 0 || (!existingQuestion.getEditable() &&
-                !existingQuestion.getPassword().equals(question.getPassword()))) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-        }
-
-        existingQuestion.setAnswer(question.getAnswer());
-        repository.save(existingQuestion);
-
-        var url = "https://" + question.getSubdomain() + hostExtension;
-
-        return "redirect:" + url;
-    }
-
-    public ResponseEntity<String> rateLimitingFallback(int id, RequestNotPermitted ex) {
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Retry-After", "60s");
-
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                .headers(responseHeaders)
-                .body("Too Many Requests - Retry After 1 Minute");
     }
 
 }
