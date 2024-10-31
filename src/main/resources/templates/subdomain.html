@@ -10,5 +10,6 @@
     <p th:text="${answer}" />
 
     <p class="attribution">Made with <a th:href="${mainSite}">...yet?</a></p>
+    <div th:replace="fragments/analytics.html :: plausible"></div>
   </body>
 </html>
