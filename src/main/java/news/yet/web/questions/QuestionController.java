@@ -93,7 +93,6 @@ public class QuestionController {
     }
 
     @GetMapping("/edit")
-    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
     public String edit(HttpServletRequest request,
             @RequestParam(name = "subdomain", required = false, defaultValue = "") String subdomain,
             Model model) {
@@ -135,7 +134,8 @@ public class QuestionController {
         return "redirect:" + url;
     }
 
-    public ResponseEntity<String> rateLimitingFallback(int id, RequestNotPermitted ex) {
+    public ResponseEntity<String> rateLimitingFallback(@Valid Question question, BindingResult bindingResult,
+            Model model, RequestNotPermitted ex) {
 
         HttpHeaders responseHeaders = new HttpHeaders();
         responseHeaders.set("Retry-After", "60s");
