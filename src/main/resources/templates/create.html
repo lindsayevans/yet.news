@@ -36,9 +36,8 @@
           </select></label
         >
       </div>
-      <fieldset>
+      <!-- <fieldset>
         <legend>Extra bits</legend>
-        <p>Not currently used, but might be in future</p>
         <div class="field-group">
           <p><strong>Chaos mode</strong></p>
           <p>Anyone can change the answer at any time</p>
@@ -67,14 +66,13 @@
             <input type="password" id="password" th:field="*{password}" />
           </label>
         </div>
-      </fieldset>
+      </fieldset> -->
       <pre
         class="field-group address"
         data-hint="This will be your website address"
         data-unavailable="Sorry, that address is unavailable"
       >
-        <label for="subdomain" aria-label="Subdomain"
-          >https://<input
+        <label for="subdomain" aria-label="Subdomain">https://<input
             type="text"
             id="subdomain"
             th:field="*{subdomain}"
