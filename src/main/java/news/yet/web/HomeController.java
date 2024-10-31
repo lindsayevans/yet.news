@@ -10,12 +10,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 @Controller
 public class HomeController {
@@ -66,6 +66,8 @@ public class HomeController {
     public Map<String, Boolean> availability(
             @RequestParam(name = "subdomain", required = true) String subdomain) {
 
+        // TODO: validation, banned words check
+
         var existing = repository.findBySubdomain(subdomain);
 
         return Collections.singletonMap("available", existing.size() == 0);
@@ -95,7 +97,7 @@ public class HomeController {
     }
 
     @PostMapping("/create")
-    public String createPost(@ModelAttribute Question question, BindingResult bindingResult,
+    public String createPost(@Valid Question question, BindingResult bindingResult,
             Model model) {
         var existing = repository.findBySubdomain(question.getSubdomain());
         if (existing.size() > 0) {
