@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -120,6 +122,47 @@ public class HomeController {
         model.addAttribute("hostExtension", hostExtension);
 
         return "success";
+    }
+
+    @GetMapping("/edit")
+    public String edit(HttpServletRequest request,
+            @RequestParam(name = "subdomain", required = false, defaultValue = "") String subdomain,
+            Model model) {
+
+        var questions = repository.findBySubdomain(subdomain);
+        if (questions.size() == 0) {
+            return "redirect:" + mainSite + "create?subdomain=" + subdomain;
+        }
+
+        var question = questions.get(0);
+        question.setPassword("");
+
+        model.addAttribute("subdomain", subdomain);
+        model.addAttribute("question", question);
+        model.addAttribute("answer", getAnswer(question.getAnswer()));
+
+        return "edit";
+
+    }
+
+    @PostMapping("/edit")
+    public String editPost(@Valid Question question, BindingResult bindingResult,
+            Model model) {
+
+        var existing = repository.findBySubdomain(question.getSubdomain());
+        var existingQuestion = existing.get(0);
+
+        if (existing.size() == 0 || (!existingQuestion.getEditable() &&
+                !existingQuestion.getPassword().equals(question.getPassword()))) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
+
+        existingQuestion.setAnswer(question.getAnswer());
+        repository.save(existingQuestion);
+
+        var url = "https://" + question.getSubdomain() + hostExtension;
+
+        return "redirect:" + url;
     }
 
 }

@@ -13,6 +13,9 @@
     <p class="answer" th:text="${answer}" />
 
     <p class="attribution">Made with <a th:href="${mainSite}">...yet?</a></p>
+    <p class="edit">
+      <a th:href="|${mainSite}edit?subdomain=${subdomain}|">✎</a>
+    </p>
     <div th:replace="fragments/analytics.html :: plausible"></div>
     <script>
       window.plausible =
