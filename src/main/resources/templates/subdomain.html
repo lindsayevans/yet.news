@@ -11,5 +11,17 @@
 
     <p class="attribution">Made with <a th:href="${mainSite}">...yet?</a></p>
     <div th:replace="fragments/analytics.html :: plausible"></div>
+    <script>
+      window.plausible =
+        window.plausible ||
+        function () {
+          (window.plausible.q = window.plausible.q || []).push(arguments);
+        };
+    </script>
+    <script th:inline="javascript">
+      plausible('Subdomain visit', {
+        props: { subdomain: /*[[${subdomain}]]*/ 'unknown' },
+      });
+    </script>
   </body>
 </html>
