@@ -105,7 +105,11 @@
       };
 
       const getSubdomain = (question) => {
-        return question.replace(/([^a-zA-Z0-9]+)/g, '-').toLowerCase();
+        return question
+          .replace(/([^a-zA-Z0-9]+)/g, '-')
+          .replace(/^-/, '')
+          .replace(/-$/, '')
+          .toLowerCase();
       };
 
       $question.addEventListener('input', () => {
