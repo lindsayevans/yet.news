@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
+import org.apache.commons.lang.RandomStringUtils;
 
 import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
@@ -90,11 +91,14 @@ public class HomeController {
             subdomain = question.replaceAll("([^a-zA-Z]+)", "-").toLowerCase();
         }
 
+        var password = RandomStringUtils.randomAlphanumeric(7);
+
         var questionModel = new Question();
         questionModel.setSubdomain(subdomain);
         questionModel.setQuestion(question);
         questionModel.setAnswer(answer);
         questionModel.setEditable(false);
+        questionModel.setPassword(password);
 
         model.addAttribute("question", questionModel);
         model.addAttribute("hostExtension", hostExtension);
