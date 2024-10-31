@@ -12,4 +12,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Webhook for CD on Azure App Service
-        run: curl ${{ secrets.AZURE_APP_SERVICE_WEBHOOK }} -H "" -d ""
+        run: curl -v ${{ secrets.AZURE_APP_SERVICE_WEBHOOK }} -H "" -d ""
