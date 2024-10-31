@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 @Controller
 public class QuestionController {
     @Autowired
-    QuestionRepository repository;
+    QuestionService questionService;
 
     @Value("${hostExtension:.yet.news}")
     private String hostExtension;
@@ -38,10 +38,6 @@ public class QuestionController {
     @Value("${mainSite:https://yet.news/}")
     private String mainSite;
 
-    private String getAnswer(String answerCode) {
-        return answerCode.substring(0, 1).toUpperCase() + answerCode.substring(1).toLowerCase();
-    }
-
     @GetMapping("/availability")
     @ResponseBody
     public Map<String, Boolean> availability(
@@ -49,9 +45,9 @@ public class QuestionController {
 
         // TODO: validation, banned words check
 
-        var existing = repository.findBySubdomain(subdomain);
+        var existing = questionService.getQuestionBySubdomain(subdomain);
 
-        return Collections.singletonMap("available", existing.size() == 0);
+        return Collections.singletonMap("available", existing == null);
     }
 
     @GetMapping("/create")
@@ -84,8 +80,8 @@ public class QuestionController {
     @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
     public String createPost(@Valid Question question, BindingResult bindingResult,
             Model model) {
-        var existing = repository.findBySubdomain(question.getSubdomain());
-        if (existing.size() > 0) {
+        var existing = questionService.getQuestionBySubdomain(question.getSubdomain());
+        if (existing != null) {
             bindingResult.addError(new FieldError("question", "subdomain",
                     question.getSubdomain(), true, null, null,
                     "Subdomain is not available"));
@@ -97,7 +93,7 @@ public class QuestionController {
             return "create";
         }
 
-        repository.insert(question);
+        questionService.createQuestion(question);
 
         var url = "https://" + question.getSubdomain() + hostExtension;
 
@@ -113,17 +109,16 @@ public class QuestionController {
             @RequestParam(name = "subdomain", required = false, defaultValue = "") String subdomain,
             Model model) {
 
-        var questions = repository.findBySubdomain(subdomain);
-        if (questions.size() == 0) {
+        var existing = questionService.getQuestionBySubdomain(subdomain);
+        if (existing == null) {
             return "redirect:" + mainSite + "create?subdomain=" + subdomain;
         }
 
-        var question = questions.get(0);
-        question.setPassword("");
+        existing.setPassword("");
 
         model.addAttribute("subdomain", subdomain);
-        model.addAttribute("question", question);
-        model.addAttribute("answer", getAnswer(question.getAnswer()));
+        model.addAttribute("question", existing);
+        model.addAttribute("answer", questionService.getDisplayAnswer(existing.getAnswer()));
 
         return "edit";
 
@@ -134,16 +129,15 @@ public class QuestionController {
     public String editPost(@Valid Question question, BindingResult bindingResult,
             Model model) {
 
-        var existing = repository.findBySubdomain(question.getSubdomain());
-        var existingQuestion = existing.get(0);
+        var existing = questionService.getQuestionBySubdomain(question.getSubdomain());
 
-        if (existing.size() == 0 || (!existingQuestion.getEditable() &&
-                !existingQuestion.getPassword().equals(question.getPassword()))) {
+        if (existing == null || (!existing.getEditable() &&
+                !existing.getPassword().equals(question.getPassword()))) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-        existingQuestion.setAnswer(question.getAnswer());
-        repository.save(existingQuestion);
+        existing.setAnswer(question.getAnswer());
+        questionService.updateQuestion(existing);
 
         var url = "https://" + question.getSubdomain() + hostExtension;
 
