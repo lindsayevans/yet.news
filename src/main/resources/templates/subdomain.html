@@ -10,7 +10,7 @@
   </head>
   <body>
     <h1 th:text="|${question.question} yet?|" />
-    <p th:text="${answer}" />
+    <p class="answer" th:text="${answer}" />
 
     <p class="attribution">Made with <a th:href="${mainSite}">...yet?</a></p>
     <div th:replace="fragments/analytics.html :: plausible"></div>
