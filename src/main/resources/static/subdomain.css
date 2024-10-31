@@ -69,8 +69,12 @@ h1 {
   font-weight: 600;
 }
 
-.form-actions {
+.password {
   margin-top: 2rem;
+}
+
+.form-actions {
+  margin-top: 1rem;
   display: flex;
   justify-content: center;
 }
