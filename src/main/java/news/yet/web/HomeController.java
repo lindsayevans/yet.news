@@ -5,7 +5,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 
@@ -99,6 +103,7 @@ public class HomeController {
     }
 
     @PostMapping("/create")
+    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
     public String createPost(@Valid Question question, BindingResult bindingResult,
             Model model) {
         var existing = repository.findBySubdomain(question.getSubdomain());
@@ -146,6 +151,7 @@ public class HomeController {
     }
 
     @PostMapping("/edit")
+    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
     public String editPost(@Valid Question question, BindingResult bindingResult,
             Model model) {
 
@@ -163,6 +169,16 @@ public class HomeController {
         var url = "https://" + question.getSubdomain() + hostExtension;
 
         return "redirect:" + url;
+    }
+
+    public ResponseEntity rateLimitingFallback(int id, RequestNotPermitted ex) {
+
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.set("Retry-After", "60s");
+
+        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
+                .headers(responseHeaders)
+                .body("Too Many Requests - Retry After 1 Minute");
     }
 
 }
