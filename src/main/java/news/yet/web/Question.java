@@ -1,6 +1,11 @@
 package news.yet.web;
 
+import java.time.OffsetDateTime;
+
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +20,9 @@ public class Question {
     @Id
     private String id;
 
+    @Version
+    private Long version;
+
     @Size(min = 2, max = 30)
     @Pattern(regexp = "^\\w[\\w-]*\\w$", message = "Address can only contain letters, numbers & dashes")
     private String subdomain;
@@ -27,5 +35,11 @@ public class Question {
     private Boolean editable;
 
     private String password;
+
+    @CreatedDate
+    private OffsetDateTime created;
+
+    @LastModifiedDate
+    private OffsetDateTime updated;
 
 }
