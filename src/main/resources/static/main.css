@@ -14,6 +14,10 @@ body {
   justify-content: center;
 }
 
+p {
+  text-align: center;
+}
+
 .create-form {
   position: relative;
   display: flex;
