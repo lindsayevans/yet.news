@@ -29,15 +29,6 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @Value("${hostExtension:.yet.news}")
-    private String hostExtension;
-
-    @Value("${mainHost:yet.news}")
-    private String mainHost;
-
-    @Value("${mainSite:https://yet.news/}")
-    private String mainSite;
-
     @GetMapping("/availability")
     @ResponseBody
     public Map<String, Boolean> availability(
@@ -71,7 +62,6 @@ public class QuestionController {
         questionModel.setPassword(password);
 
         model.addAttribute("question", questionModel);
-        model.addAttribute("hostExtension", hostExtension);
 
         return "create";
     }
@@ -89,16 +79,15 @@ public class QuestionController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("question", question);
-            model.addAttribute("hostExtension", hostExtension);
             return "create";
         }
 
         questionService.createQuestion(question);
 
+        var hostExtension = (String) model.getAttribute("hostExtension");
         var url = "https://" + question.getSubdomain() + hostExtension;
 
         model.addAttribute("url", url);
-        model.addAttribute("hostExtension", hostExtension);
 
         return "success";
     }
@@ -109,6 +98,7 @@ public class QuestionController {
             @RequestParam(name = "subdomain", required = false, defaultValue = "") String subdomain,
             Model model) {
 
+        var mainSite = (String) model.getAttribute("mainSite");
         var existing = questionService.getQuestionBySubdomain(subdomain);
         if (existing == null) {
             return "redirect:" + mainSite + "create?subdomain=" + subdomain;
@@ -139,6 +129,7 @@ public class QuestionController {
         existing.setAnswer(question.getAnswer());
         questionService.updateQuestion(existing);
 
+        var hostExtension = (String) model.getAttribute("hostExtension");
         var url = "https://" + question.getSubdomain() + hostExtension;
 
         return "redirect:" + url;

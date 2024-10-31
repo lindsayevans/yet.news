@@ -1,7 +1,6 @@
 package news.yet.web.homepage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,22 +12,14 @@ public class HomeController {
     @Autowired
     QuestionService questionService;
 
-    @Value("${hostExtension:.yet.news}")
-    private String hostExtension;
-
-    @Value("${mainHost:yet.news}")
-    private String mainHost;
-
-    @Value("${mainSite:https://yet.news/}")
-    private String mainSite;
-
     @GetMapping()
     public String home(HttpServletRequest request, Model model) {
-        model.addAttribute("host", request.getServerName());
-        model.addAttribute("mainSite", mainSite);
-        var host = request.getServerName();
+        var host = (String) model.getAttribute("host");
+        var mainHost = (String) model.getAttribute("mainHost");
+        var mainSite = (String) model.getAttribute("mainSite");
+        var hostExtension = (String) model.getAttribute("hostExtension");
 
-        if (!host.equals(mainHost)) {
+        if (host != null && !host.equals(mainHost)) {
             var subdomain = host.replaceAll(hostExtension, "");
 
             var question = questionService.getQuestionBySubdomain(subdomain);
