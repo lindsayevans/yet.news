@@ -16,7 +16,7 @@
     <p class="edit">
       <a th:href="|${mainSite}edit?subdomain=${subdomain}|">✎</a>
     </p>
-    <div th:replace="fragments/analytics.html :: plausible"></div>
+    <div th:replace="~{fragments/analytics.html :: plausible}"></div>
     <script>
       window.plausible =
         window.plausible ||

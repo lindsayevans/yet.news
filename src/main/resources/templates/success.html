@@ -15,6 +15,6 @@
       Your page is available at
       <a th:href="${url}" th:text="${url}"></a>
     </p>
-    <div th:replace="fragments/analytics.html :: plausible"></div>
+    <div th:replace="~{fragments/analytics.html :: plausible}"></div>
   </body>
 </html>
