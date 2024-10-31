@@ -86,7 +86,7 @@ public class HomeController {
             Model model) {
 
         var answer = "maybe";
-        if (!question.equals("")) {
+        if (!question.equals("") && subdomain.equals("")) {
             subdomain = question.replaceAll("([^a-zA-Z]+)", "-").toLowerCase();
         }
 
