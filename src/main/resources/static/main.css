@@ -78,3 +78,10 @@ p {
 .create-form .password {
   margin-top: 2rem;
 }
+
+.lists {
+  display: flex;
+  gap: 4rem;
+  align-items: flex-start;
+  justify-content: space-evenly;
+}

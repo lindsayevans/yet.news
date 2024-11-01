@@ -41,6 +41,17 @@ public class QuestionController {
         return Collections.singletonMap("available", existing == null);
     }
 
+    @GetMapping("/list")
+    public String list(Model model) {
+        var latest = questionService.getLatest(5);
+        model.addAttribute("latest", latest);
+
+        var greatest = questionService.getMostUpdated(5);
+        model.addAttribute("greatest", greatest);
+
+        return "list";
+    }
+
     @GetMapping("/create")
     public String create(HttpServletRequest request,
             @RequestParam(name = "subdomain", required = false, defaultValue = "") String subdomain,

@@ -1,6 +1,14 @@
 package news.yet.web.questions;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +37,14 @@ public class QuestionService {
 
     public void updateQuestion(Question question) {
         repository.save(question);
+    }
+
+    public List<Question> getLatest(int count) {
+        return repository.findAll(PageRequest.of(0, count, Sort.by("created").ascending())).toList();
+    }
+
+    public List<Question> getMostUpdated(int count) {
+        return repository.findAll(PageRequest.of(0, count, Sort.by("version").descending())).toList();
     }
 
 }
