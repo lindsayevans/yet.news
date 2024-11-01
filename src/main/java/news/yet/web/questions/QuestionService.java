@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,7 @@ public class QuestionService {
         return answerCode.substring(0, 1).toUpperCase() + answerCode.substring(1).toLowerCase();
     }
 
+    @Cacheable("question")
     public Question getQuestionBySubdomain(String subdomain) {
         var questions = repository.findBySubdomain(subdomain);
         if (questions.size() == 0) {
@@ -46,18 +49,22 @@ public class QuestionService {
         return true;
     }
 
+    @CacheEvict("latestQuestions")
     public void createQuestion(Question question) {
         repository.insert(question);
     }
 
+    @CacheEvict(value = { "question", "mostUpdatedQuestions" }, allEntries = true)
     public void updateQuestion(Question question) {
         repository.save(question);
     }
 
+    @Cacheable("latestQuestions")
     public List<Question> getLatest(int count) {
         return repository.findAll(PageRequest.of(0, count, Sort.by("created").ascending())).toList();
     }
 
+    @Cacheable("mostUpdatedQuestions")
     public List<Question> getMostUpdated(int count) {
         return repository.findAll(PageRequest.of(0, count, Sort.by("version").descending())).toList();
     }
