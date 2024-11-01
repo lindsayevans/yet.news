@@ -63,12 +63,7 @@ public class QuestionController {
 
         var password = RandomStringUtils.randomAlphanumeric(7);
 
-        var questionModel = new Question();
-        questionModel.setSubdomain(subdomain);
-        questionModel.setQuestion(question);
-        questionModel.setAnswer(answer);
-        questionModel.setEditable(false);
-        questionModel.setPassword(password);
+        var questionModel = new Question(subdomain, question, answer, false, password);
 
         model.addAttribute("question", questionModel);
 

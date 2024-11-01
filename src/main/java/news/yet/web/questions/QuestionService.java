@@ -38,8 +38,7 @@ public class QuestionService {
     }
 
     public boolean checkSubdomainValidity(String subdomain) {
-        var question = new Question();
-        question.setSubdomain(subdomain);
+        var question = new Question(subdomain);
 
         Set<ConstraintViolation<Question>> violations = validator.validate(question);
         if (!violations.isEmpty()) {

@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.validation.constraints.Pattern;
@@ -41,5 +42,17 @@ public class Question {
 
     @LastModifiedDate
     private OffsetDateTime updated;
+
+    public Question(String subdomain) {
+        this.subdomain = subdomain;
+    }
+
+    public Question(String subdomain, String question, String answer, boolean editable, String password) {
+        this.subdomain = subdomain;
+        this.question = question;
+        this.answer = answer;
+        this.editable = editable;
+        this.password = password;
+    }
 
 }
