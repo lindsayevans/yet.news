@@ -18,6 +18,27 @@ p {
   text-align: center;
 }
 
+.create-button a {
+  padding: 0.5rem;
+  border: 1px solid currentColor;
+  border-radius: 0.25rem;
+  font-size: 2rem;
+  text-decoration: none;
+}
+
+.site-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 2rem 0;
+  padding: 0;
+}
+
+.site-links li {
+  margin: 0;
+  padding: 0;
+}
+
 .create-form {
   position: relative;
   display: flex;
