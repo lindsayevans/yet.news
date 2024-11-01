@@ -1,20 +1,23 @@
 package news.yet.web.questions;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Limit;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Service;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 
 @Service
 public class QuestionService {
     @Autowired
     QuestionRepository repository;
+
+    @Autowired
+    private Validator validator;
 
     public String getDisplayAnswer(String answerCode) {
         return answerCode.substring(0, 1).toUpperCase() + answerCode.substring(1).toLowerCase();
@@ -29,6 +32,18 @@ public class QuestionService {
         var question = questions.get(0);
 
         return question;
+    }
+
+    public boolean checkSubdomainValidity(String subdomain) {
+        var question = new Question();
+        question.setSubdomain(subdomain);
+
+        Set<ConstraintViolation<Question>> violations = validator.validate(question);
+        if (!violations.isEmpty()) {
+            return false;
+        }
+
+        return true;
     }
 
     public void createQuestion(Question question) {

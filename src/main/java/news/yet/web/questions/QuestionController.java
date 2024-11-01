@@ -34,11 +34,10 @@ public class QuestionController {
     public Map<String, Boolean> availability(
             @RequestParam(name = "subdomain", required = true) String subdomain) {
 
-        // TODO: validation, banned words check
-
         var existing = questionService.getQuestionBySubdomain(subdomain);
+        var valid = questionService.checkSubdomainValidity(subdomain);
 
-        return Collections.singletonMap("available", existing == null);
+        return Collections.singletonMap("available", existing == null && valid);
     }
 
     @GetMapping("/list")
