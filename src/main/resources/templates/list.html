@@ -18,7 +18,7 @@
           <li th:each="question : ${latest}">
             <a
               th:href="|https://${question.subdomain}${hostExtension}|"
-              th:text="${question.question}"
+              th:text="|${question.question} yet?|"
             ></a>
           </li>
         </ul>
@@ -29,7 +29,7 @@
           <li th:each="question : ${greatest}">
             <a
               th:href="|https://${question.subdomain}${hostExtension}|"
-              th:text="${question.question}"
+              th:text="|${question.question} yet?|"
             ></a>
           </li>
         </ul>
