@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>...yet? - Latest & Most Updated</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="/main.css" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <h1><a href="/">...yet?</a> - FAQ</h1>
+
+    <main class="faq">
+      <h2>lolwut?</h2>
+      <p>
+        Allows you to create a basic single-page website that answers any
+        question (as long as it ends in 'yet?') with a simple Yes/No/Maybe
+      </p>
+
+      <h2>Why?</h2>
+      <p>
+        I went through a period of manually creating a bunch of sites that did
+        just that, but it seems like too much work to register the domain,
+        create the page, setup hosting etc.
+      </p>
+
+      <h2>What's this 'Chaos mode' business?</h2>
+      <p>
+        When switched to 'On', anybody can change the answer to your question at
+        any time
+      </p>
+
+      <h2>What about the password?</h2>
+      <p>
+        If you want to change your answer: make a note of the auto-generated
+        password, or change to something more memorable
+      </p>
+
+      <h2>What are the rules?</h2>
+      <p>
+        I reserve the right to delete anything at any time for whatever reason
+      </p>
+
+      <h2>Who the hell is behind all this?</h2>
+      <p>
+        <a href="https://linz.id.au/" target="_blank">Lindsay Evans</a> - a web
+        developer from Sydney, Australia
+      </p>
+
+      <h2>
+        Can I steal the code? Make suggestions? Complain about the design?
+      </h2>
+      <p>
+        <a href="https://github.com/lindsayevans/yet.news/" target="_blank"
+          >Sure</a
+        >
+      </p>
+
+      <h2>I've found something offensive, can you take it down?</h2>
+      <p>
+        Probably, send the details to
+        <a href="mailto:yet.news@linz.id.au">yet.news@linz.id.au</a>
+      </p>
+    </main>
+
+    <div th:replace="~{fragments/analytics.html :: plausible}"></div>
+  </body>
+</html>

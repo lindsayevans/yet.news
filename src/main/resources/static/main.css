@@ -85,3 +85,11 @@ p {
   align-items: flex-start;
   justify-content: space-evenly;
 }
+
+.faq {
+  max-width: 80vw;
+}
+
+.faq p {
+  text-align: left;
+}

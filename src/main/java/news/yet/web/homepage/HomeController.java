@@ -37,4 +37,8 @@ public class HomeController {
         return "home";
     }
 
+    @GetMapping("/faq")
+    public String faq() {
+        return "faq";
+    }
 }
