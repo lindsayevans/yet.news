@@ -60,7 +60,7 @@ public class QuestionService {
 
     @Cacheable("latestQuestions")
     public List<Question> getLatest(int count) {
-        return repository.findAll(PageRequest.of(0, count, Sort.by("created").ascending())).toList();
+        return repository.findAll(PageRequest.of(0, count, Sort.by("created").descending())).toList();
     }
 
     @Cacheable("mostUpdatedQuestions")
