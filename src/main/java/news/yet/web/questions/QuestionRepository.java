@@ -13,6 +13,4 @@ public interface QuestionRepository extends MongoRepository<Question, String> {
 
     List<Question> findBySubdomain(@Param("subdomain") String subdomain);
 
-    List<Question> findTopByCreated(Sort sort, Limit limit);
-
 }
