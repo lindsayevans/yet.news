@@ -32,33 +32,52 @@ h1 {
 
 .attribution {
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
-  padding: 0.25rem 0.5rem;
+  padding: 0.5rem 1rem;
   margin: 0;
-  border-radius: 0.5rem 0 0 0;
-  background-color: blanchedalmond;
-  color: chocolate;
+  border-radius: 0 0 0 0.5rem;
+  background-color: chocolate;
+  color: blanchedalmond;
+  text-decoration: none;
+  opacity: 0.333;
+  transition: opacity 0.3s ease-in-out;
 }
 
-.attribution a {
-  color: chocolate;
+.attribution strong {
+  text-decoration: underline;
+}
+
+.attribution:hover {
+  opacity: 1;
 }
 
 .edit {
   position: absolute;
   top: 0;
-  right: 0;
+  left: 0;
   margin: 0;
   font-size: 2rem;
 }
 
 .edit a {
-  display: block;
-  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.5rem 0.5rem 0.5rem;
   color: #333;
   text-decoration: none;
-  transform: scaleX(-1);
+  opacity: 0.333;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.edit a:hover {
+  opacity: 1;
+}
+
+.edit a:hover::after {
+  content: 'Edit this page';
+  padding-left: 1rem;
+  font-size: 1rem;
 }
 
 .edit-form #answer {

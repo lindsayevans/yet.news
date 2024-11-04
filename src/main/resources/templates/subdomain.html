@@ -12,10 +12,17 @@
     <h1 th:text="|${question.question} yet?|" />
     <p class="answer" th:text="${answer}" />
 
-    <p class="attribution">Made with <a th:href="${mainSite}">...yet?</a></p>
+    <a class="attribution" th:href="${mainSite}"
+      >Made with <strong>...yet?</strong></a
+    >
     <p class="edit">
-      <a th:href="|${mainSite}edit?subdomain=${subdomain}|">✎</a>
+      <a
+        title="Edit this page"
+        th:href="|${mainSite}edit?subdomain=${subdomain}|"
+        >✎</a
+      >
     </p>
+
     <div th:replace="~{fragments/analytics.html :: plausible}"></div>
     <script>
       window.plausible =
