@@ -26,7 +26,7 @@ public class Question {
     @Version
     private Long version;
 
-    @Size(min = 2, max = 30)
+    @Size(min = 2, max = 255)
     @Pattern(regexp = "^\\p{Alnum}[\\p{Alnum}-]*\\p{Alnum}$", message = "Address can only contain letters, numbers & dashes")
     private String subdomain;
 
