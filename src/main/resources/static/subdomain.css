@@ -1,9 +1,25 @@
+:root {
+  --system-font: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+  --colour-100: #111;
+  --colour-300: #333;
+  --colour-600: #666;
+  --colour-900: #eee;
+  --colour-note: palegoldenrod;
+  --colour-error: darkred;
+  --colour-success: darkgreen;
+
+  --colour-link: color-mix(in oklab, #00e, var(--colour-100) 33.333%);
+  --colour-visited: color-mix(in oklab, #551a8b, var(--colour-600) 33.333%);
+  --colour-active: color-mix(in oklab, #f00, var(--colour-100) 33.333%);
+}
+
 html,
 body {
   height: 100%;
   margin: 0;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--system-font);
 }
 
 body {
@@ -12,12 +28,19 @@ body {
   gap: 2rem;
   align-items: center;
   justify-content: center;
+  background-color: var(--colour-900);
+  color: var(--colour-100);
+}
+
+::selection {
+  background-color: var(--colour-600);
+  color: var(--colour-900);
 }
 
 h1 {
   margin: 0 2rem;
   font-size: 1rem;
-  color: #999;
+  color: var(--colour-600);
   text-align: center;
   font-weight: normal;
 }
@@ -37,18 +60,19 @@ h1 {
   padding: 0.5rem 1rem;
   margin: 0;
   border-radius: 0 0 0 0.5rem;
-  background-color: chocolate;
-  color: blanchedalmond;
   text-decoration: none;
   opacity: 0.333;
   transition: opacity 0.3s ease-in-out;
+  background-color: var(--colour-link);
+  color: var(--colour-900);
 }
 
 .attribution strong {
   text-decoration: underline;
 }
 
-.attribution:hover {
+.attribution:hover,
+.attribution:focus-visible {
   opacity: 1;
 }
 
@@ -64,17 +88,19 @@ h1 {
   display: flex;
   align-items: center;
   padding: 0 0.5rem 0.5rem 0.5rem;
-  color: #333;
+  color: var(--colour-300);
   text-decoration: none;
   opacity: 0.333;
   transition: opacity 0.3s ease-in-out;
 }
 
-.edit a:hover {
+.edit a:hover,
+.edit a:focus-visible {
   opacity: 1;
 }
 
-.edit a:hover::after {
+.edit a:hover::after,
+.edit a:focus-visible::after {
   content: 'Edit this page';
   padding-left: 1rem;
   font-size: 1rem;
