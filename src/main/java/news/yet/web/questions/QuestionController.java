@@ -71,7 +71,7 @@ public class QuestionController {
     }
 
     @PostMapping("/create")
-    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
+    @RateLimiter(name = "basic")
     public String createPost(@Valid Question question, BindingResult bindingResult,
             Model model) {
         var existing = questionService.getQuestionBySubdomain(question.getSubdomain());
@@ -118,7 +118,7 @@ public class QuestionController {
     }
 
     @PostMapping("/edit")
-    @RateLimiter(name = "basic", fallbackMethod = "rateLimitingFallback")
+    @RateLimiter(name = "basic")
     public String editPost(@Valid Question question, BindingResult bindingResult,
             Model model) {
 
@@ -136,17 +136,6 @@ public class QuestionController {
         var url = "https://" + question.getSubdomain() + hostExtension;
 
         return "redirect:" + url;
-    }
-
-    public ResponseEntity<String> rateLimitingFallback(@Valid Question question, BindingResult bindingResult,
-            Model model, RequestNotPermitted ex) {
-
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.set("Retry-After", "60s");
-
-        return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
-                .headers(responseHeaders)
-                .body("Too Many Requests - Retry After 1 Minute");
     }
 
 }
