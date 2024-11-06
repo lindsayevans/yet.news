@@ -14,13 +14,20 @@ public class HomeController {
 
     @GetMapping()
     public String home(HttpServletRequest request, Model model) {
+        System.out.println("home()");
         var host = (String) model.getAttribute("host");
         var mainHost = (String) model.getAttribute("mainHost");
         var mainSite = (String) model.getAttribute("mainSite");
         var hostExtension = (String) model.getAttribute("hostExtension");
 
+        System.out.println("host: " + host);
+        System.out.println("mainHost: " + mainHost);
+        System.out.println("mainSite: " + mainSite);
+        System.out.println("hostExtension: " + hostExtension);
+
         if (host != null && !host.equals(mainHost)) {
             var subdomain = host.replaceAll(hostExtension, "");
+            System.out.println("subdomain: " + subdomain);
 
             var question = questionService.getQuestionBySubdomain(subdomain);
             if (question == null) {

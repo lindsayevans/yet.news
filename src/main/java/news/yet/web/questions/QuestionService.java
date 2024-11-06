@@ -27,7 +27,9 @@ public class QuestionService {
 
     @Cacheable("question")
     public Question getQuestionBySubdomain(String subdomain) {
+        System.out.println("getQuestionBySubdomain()");
         var questions = repository.findBySubdomain(subdomain);
+        System.out.println("questions.size(): " + questions.size());
         if (questions.size() == 0) {
             return null;
         }
