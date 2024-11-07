@@ -17,28 +17,55 @@
       th:action="@{/create}"
       th:object="${question}"
     >
-      <div class="field-group" data-hint="Your question">
-        <label for="question" aria-label="Question">
-          <input
-            type="text"
-            id="question"
-            th:field="*{question}"
-            placeholder="Is it lunch time"
-            required
-            autofocus
-          />
-          yet?</label
+      <div class="preview">
+        <div
+          class="field-group address"
+          data-hint="This will be your website address"
+          data-unavailable="Sorry, that address is unavailable"
         >
+          <label for="subdomain" aria-label="Subdomain"
+            >https://<input
+              type="text"
+              id="subdomain"
+              th:field="*{subdomain}"
+              placeholder="is-it-lunch-time"
+              minlength="2"
+              maxlength="255"
+              required
+              size="20"
+            />[[${hostExtension}]]</label
+          >
+          <p
+            th:if="${#fields.hasErrors('subdomain')}"
+            th:errors="*{subdomain}"
+          ></p>
+        </div>
+        <div class="field-group question" data-hint="Your question">
+          <label for="question" aria-label="Question">
+            <input
+              type="text"
+              id="question"
+              th:field="*{question}"
+              placeholder="Is it lunch time"
+              required
+              autofocus
+              size="20"
+            />
+            yet?</label
+          >
+        </div>
+        <div class="field-group answer" data-hint="The answer">
+          <label for="answer" aria-label="Answer">
+            <select th:field="*{answer}" id="answer" required>
+              <option
+                th:value="${answer}"
+                th:text="${answer}"
+                th:each="answer : ${answers}"
+              ></option></select
+          ></label>
+        </div>
       </div>
-      <div class="field-group" data-hint="The answer">
-        <label for="answer" aria-label="Answer">
-          <select th:field="*{answer}" id="answer" required>
-            <option value="yes">Yes</option>
-            <option value="no">No</option>
-            <option value="maybe">Maybe</option>
-          </select></label
-        >
-      </div>
+
       <fieldset>
         <legend>Extra bits</legend>
         <div class="field-group">
@@ -70,23 +97,6 @@
           </label>
         </div>
       </fieldset>
-      <pre
-        class="field-group address"
-        data-hint="This will be your website address"
-        data-unavailable="Sorry, that address is unavailable"
-      >
-        <label for="subdomain" aria-label="Subdomain">https://<input
-            type="text"
-            id="subdomain"
-            th:field="*{subdomain}"
-            placeholder="is-it-lunch-time"
-            minlength="2"
-            maxlength="255"
-            required
-          />[[${hostExtension}]]</label
-        >
-        <p th:if="${#fields.hasErrors('subdomain')}" th:errors="*{subdomain}"></p>
-      </pre>
       <div class="form-actions"><button type="submit">Create!</button></div>
     </form>
     <script>
@@ -117,6 +127,7 @@
           $subdomain.value = getSubdomain($question.value);
           checkAvailability($subdomain.value);
         }
+        $question.setAttribute('size', $question.value.length);
       });
 
       $subdomain.addEventListener('input', () => {

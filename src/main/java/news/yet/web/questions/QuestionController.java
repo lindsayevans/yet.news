@@ -63,6 +63,7 @@ public class QuestionController {
         var questionModel = new Question(subdomain, question, answer, false, password);
 
         model.addAttribute("question", questionModel);
+        model.addAttribute("answers", Answers.getValues());
 
         return "create";
     }
